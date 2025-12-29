@@ -38,7 +38,27 @@ query_vector = vectorizer.transform([query])
 query_vector.shape
 
 # %%
-cosine_similarity(tfidf_matrix, query_vector).flatten() # transforma em um array de 1 dimensão
+similarities = cosine_similarity(tfidf_matrix, query_vector).flatten() # transforma em um array de 1 dimensão
+
+
 
 
 # %%
+
+def search_tfidf(query, vectorizer, tfidf_matrix):
+
+    query_vector = vectorizer.transform([query])
+    similarities = cosine_similarity(tfidf_matrix, query_vector).flatten()
+    sorted_similarity = list(enumerate(similarities))
+    results = sorted(sorted_similarity,key=lambda x: x[1], reverse=True)
+    return results
+
+# %%
+search_similarities = search_tfidf(query, vectorizer, tfidf_matrix)
+search_similarities
+  
+# %%
+print(f"Os 10 documentos mais similares para a query '{query}'")
+
+for doc_id, similarity in search_similarities[:10]:
+    print(f"Documento {doc_id}: {similarity:.4f}")
